@@ -1,0 +1,24 @@
+name: Make Coverage Badge
+on:
+    push:
+        branches: [ main ]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: actions/setup-node@v3
+                with:
+                    node-version: 18
+            -   run: npm run test
+            -   run: npm run coverage
+    badges:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@master
+            -   uses: iansu/codecov-action-node@v1
+                with:
+                    token: ${{secrets.CODECOV_TOKEN}} #required
+                    file: ./coverage/cobertura-coverage.xml #optional
+                    flags: unittests #optional
