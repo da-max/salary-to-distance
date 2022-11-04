@@ -1,4 +1,4 @@
-name: Make Coverage Badge
+name: Test app
 on:
     push:
         branches: [ main ]
