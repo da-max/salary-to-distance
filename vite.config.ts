@@ -8,6 +8,7 @@ export default defineConfig({
         coverage: {
             reporter: ['text-summary', 'cobertura'],
         },
+        mockReset: true,
         globals: true,
         environment: 'jsdom',
         setupFiles: './src/test/setup.ts',

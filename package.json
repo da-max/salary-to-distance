@@ -13,11 +13,13 @@
     "@esri/arcgis-rest-geocoding": "^4.0.2",
     "@esri/arcgis-rest-request": "^4.1.1",
     "@esri/arcgis-rest-routing": "^4.0.3",
+    "@heroicons/react": "^2.0.13",
     "daisyui": "^2.38.0",
     "esri-leaflet": "^3.0.8",
     "leaflet": "^1.9.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-esri-leaflet": "^2.0.1",
     "react-leaflet": "^4.1.0"
   },
   "devDependencies": {

@@ -1,10 +1,11 @@
 import Search from './Panel/Search'
-import { useState } from 'react'
 import { IPoint } from '@esri/arcgis-rest-geocoding'
+import { ArrowSmallRightIcon } from '@heroicons/react/20/solid'
+import useRoute from '../hook/useRoute'
 
 export default function () {
-    const [departure, setDeparture] = useState<IPoint | null>(null)
-    const [arrival, setArrival] = useState<IPoint | null>(null)
+    const { isValid, setDeparture, setArrival } = useRoute()
+
     return (
         <div className={'w-1/4 p-5'}>
             <Search
@@ -17,8 +18,15 @@ export default function () {
                 placeholder={'Entrez votre point d’arriver'}
                 children={'Arrivée'}
             />
-            {departure?.x}
-            {arrival?.x}
+            <div className={'text-right pt-8'}>
+                <button
+                    className={`btn btn-primary ${
+                        !isValid ? 'btn-disabled' : ''
+                    }`}
+                >
+                    <ArrowSmallRightIcon className={'w-6 h-6'} />Y aller
+                </button>
+            </div>
         </div>
     )
 }

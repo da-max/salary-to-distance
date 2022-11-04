@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 interface ImportMetaEnv {
-    readonly ESRI_API_KEY: string
+    readonly VITE_ESRI_API_KEY: string
     // more env variables...
 }
 

@@ -4,9 +4,28 @@ import restGeocoding, {
     IGeocodeResponse,
     ISuggestResponse,
 } from '@esri/arcgis-rest-geocoding'
-import { locationElement, suggestionElement } from './constants'
+import { locationElement, route, suggestionElement } from './constants'
+import restRouting, {
+    ISolveRouteOptions,
+    ISolveRouteResponse,
+} from '@esri/arcgis-rest-routing'
 
 beforeAll(() => {
+    vi.mock(
+        '@esri/arcgis-rest-routing',
+        async (): Promise<typeof restRouting> => {
+            const arcgisRestRouting: typeof restRouting = await vi.importActual(
+                '@esri/arcgis-rest-routing'
+            )
+            return {
+                ...arcgisRestRouting,
+                solveRoute: async (
+                    _: ISolveRouteOptions
+                ): Promise<ISolveRouteResponse> => route,
+            } as typeof restRouting
+        }
+    )
+
     vi.mock('@esri/arcgis-rest-geocoding', async () => {
         const arcgisRestGeocoding: typeof restGeocoding = await vi.importActual(
             '@esri/arcgis-rest-geocoding'
