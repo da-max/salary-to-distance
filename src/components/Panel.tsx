@@ -2,9 +2,21 @@ import Search from './Panel/Search'
 import { IPoint } from '@esri/arcgis-rest-geocoding'
 import { ArrowSmallRightIcon } from '@heroicons/react/20/solid'
 import useRoute from '../hook/useRoute'
+import { ISolveRouteResponse } from '@esri/arcgis-rest-routing'
+import { useEffect } from 'react'
 
-export default function () {
-    const { isValid, setDeparture, setArrival } = useRoute()
+export interface IProps {
+    onRoutes: (routes: ISolveRouteResponse['routes']) => void
+}
+
+export default function (props: IProps): JSX.Element {
+    const { isValid, setDeparture, setArrival, getRoutes, routes } = useRoute()
+
+    useEffect(() => {
+        if (routes) {
+            props.onRoutes(routes)
+        }
+    }, [routes])
 
     return (
         <div className={'w-1/4 p-5'}>
@@ -23,6 +35,7 @@ export default function () {
                     className={`btn btn-primary ${
                         !isValid ? 'btn-disabled' : ''
                     }`}
+                    onClick={getRoutes}
                 >
                     <ArrowSmallRightIcon className={'w-6 h-6'} />Y aller
                 </button>

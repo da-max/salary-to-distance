@@ -25,7 +25,7 @@ describe('useRoute', () => {
     it('should solveRoute only departure and arrival', async function () {
         const { result } = renderHook(() => useRoute())
         act(() => {
-            result.current.getRoute()
+            result.current.getRoutes()
         })
         await waitFor(() => expect(result.current.routes).toBeNull())
     })
@@ -44,7 +44,7 @@ describe('useRoute', () => {
         })
 
         act(() => {
-            result.current.getRoute()
+            result.current.getRoutes()
         })
         await waitFor(() => expect(result.current.routes).toBe(route.routes))
     })

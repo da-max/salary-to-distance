@@ -1,21 +1,17 @@
 import 'leaflet/dist/leaflet.css'
-import { MapContainer, Marker, TileLayer } from 'react-leaflet'
-import { IPoint } from '@esri/arcgis-rest-geocoding'
+import { GeoJSON, MapContainer, TileLayer } from 'react-leaflet'
+import { ISolveRouteResponse } from '@esri/arcgis-rest-routing'
+import { GeoJsonObject } from 'geojson'
 
 export interface IProps {
-    departure: IPoint | null
-    arrival: IPoint | null
+    travel: ISolveRouteResponse['routes'] | null
 }
 
 export default function Map(props: IProps) {
-    const departureMarker = () => {
-        if (props.departure)
-            return <Marker position={[props.departure.y, props.departure.x]} />
-    }
-
-    const arrivalMarker = () => {
-        if (props.arrival)
-            return <Marker position={[props.arrival.y, props.arrival.x]} />
+    const travel = () => {
+        if (props.travel && props.travel.geoJson) {
+            return <GeoJSON data={props.travel.geoJson as GeoJsonObject} />
+        }
     }
 
     return (
@@ -23,8 +19,7 @@ export default function Map(props: IProps) {
             <TileLayer
                 url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
             />
-            {departureMarker()}
-            {arrivalMarker()}
+            {travel()}
         </MapContainer>
     )
 }

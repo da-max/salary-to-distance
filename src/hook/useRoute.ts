@@ -5,6 +5,7 @@ import {
     ISolveRouteResponse,
     solveRoute,
 } from '@esri/arcgis-rest-routing'
+import { ApiKeyManager } from '@esri/arcgis-rest-request'
 
 export default function useRoute() {
     const [departure, setDeparture] = useState<IPoint | null>(null)
@@ -14,12 +15,18 @@ export default function useRoute() {
         null
     )
 
-    const getRoute = async () => {
+    const authentication: ApiKeyManager = ApiKeyManager.fromKey(
+        import.meta.env.VITE_ESRI_API_KEY
+    )
+
+    const getRoutes = async () => {
         if (departure && arrival) {
             try {
                 const res: ISolveRouteResponse = await solveRoute({
                     stops: [departure, arrival],
+                    authentication,
                 } as ISolveRouteOptions)
+                console.log(res)
                 setRoutes(res.routes)
             } catch (e) {
                 console.log(e)
@@ -41,7 +48,7 @@ export default function useRoute() {
         arrival,
         setArrival,
         isValid,
-        getRoute,
+        getRoutes,
         routes,
     }
 }
