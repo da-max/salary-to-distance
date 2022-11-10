@@ -1,4 +1,4 @@
-import useSearch, { ISuggestion } from '../../hook/useSearch'
+import useSearch, { ISuggestion } from '../../../hook/useSearch'
 import { FormEvent, ReactNode, useEffect } from 'react'
 import SearchDropdown from './SearchDropdown'
 import { IPoint } from '@esri/arcgis-rest-geocoding'
@@ -9,7 +9,7 @@ export interface IProps {
     onValid: (point: IPoint) => void
 }
 
-export default function Search(props: IProps) {
+export default function SearchInput(props: IProps) {
     const { value, setValue, open, suggestions, setOpen } = useSearch()
 
     const onSelect = (suggestion: ISuggestion) => {

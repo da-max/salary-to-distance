@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import SearchDropdown from './SearchDropdown'
 import { vi } from 'vitest'
-import { ISuggestion } from '../../hook/useSearch'
+import { ISuggestion } from '../../../hook/useSearch'
 
 describe('SearchDropdown', function () {
     it('should contains dropdown', function () {

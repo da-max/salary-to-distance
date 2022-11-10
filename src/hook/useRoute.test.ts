@@ -48,4 +48,23 @@ describe('useRoute', () => {
         })
         await waitFor(() => expect(result.current.routes).toBe(route.routes))
     })
+
+    it('should be loading when getRoutes is called', async function () {
+        const { result } = renderHook(() => useRoute())
+        await act(() => {
+            result.current.setDeparture({
+                x: 12,
+                y: 20,
+            })
+            result.current.setArrival({
+                x: 20,
+                y: 30,
+            })
+        })
+        act(() => {
+            result.current.getRoutes()
+        })
+        await waitFor(() => expect(result.current.loading).toBe(true))
+        await waitFor(() => expect(result.current.loading).toBeFalsy())
+    })
 })

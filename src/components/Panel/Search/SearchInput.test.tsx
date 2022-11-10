@@ -6,17 +6,18 @@ import {
     screen,
     waitFor,
 } from '@testing-library/react'
-import Search from './Search'
-import { suggestionElement } from '../../test/constants'
+import SearchInput from './SearchInput'
+import { suggestionElement } from '../../../test/constants'
+import { vi } from 'vitest'
 
-describe('Search', function () {
+describe('SearchInput', function () {
     const labelName: string = 'My Label Test'
     beforeEach(() => {
         act(() => {
             render(
-                <Search onValid={() => null} placeholder={'test'}>
+                <SearchInput onValid={() => null} placeholder={'test'}>
                     {labelName}
-                </Search>
+                </SearchInput>
             )
         })
     })
@@ -88,5 +89,28 @@ describe('Search', function () {
             expect(input).toHaveValue(dropdownEntry.textContent)
         )
         await waitFor(() => expect(dropdown).not.toHaveClass('dropdown-open'))
+    })
+
+    it('should call onValid if location is fill', async function () {
+        cleanup()
+        const spy = vi.fn(() => null)
+        render(
+            <SearchInput onValid={spy} placeholder={'onValid test'}>
+                My onValid test
+            </SearchInput>
+        )
+        const input: HTMLInputElement =
+            screen.getByPlaceholderText<HTMLInputElement>('onValid test')
+        const dropdown = document.querySelector('.dropdown')
+        await act(() => {
+            fireEvent.change(input, { target: { value: 'test' } })
+        })
+        const dropdownEntry = screen.getByText(suggestionElement.text, {
+            exact: true,
+        })
+        act(() => {
+            fireEvent.click(dropdownEntry)
+        })
+        await waitFor(() => expect(spy).toHaveBeenCalledTimes(1))
     })
 })

@@ -21,7 +21,12 @@ beforeAll(() => {
                 ...arcgisRestRouting,
                 solveRoute: async (
                     _: ISolveRouteOptions
-                ): Promise<ISolveRouteResponse> => route,
+                ): Promise<ISolveRouteResponse> =>
+                    new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            resolve(route)
+                        }, 300)
+                    }),
             } as typeof restRouting
         }
     )

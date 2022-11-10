@@ -14,6 +14,7 @@ export default function useRoute() {
     const [routes, setRoutes] = useState<ISolveRouteResponse['routes'] | null>(
         null
     )
+    const [loading, setLoading] = useState<boolean>(false)
 
     const authentication: ApiKeyManager = ApiKeyManager.fromKey(
         import.meta.env.VITE_ESRI_API_KEY
@@ -22,14 +23,16 @@ export default function useRoute() {
     const getRoutes = async () => {
         if (departure && arrival) {
             try {
+                setLoading(true)
                 const res: ISolveRouteResponse = await solveRoute({
                     stops: [departure, arrival],
                     authentication,
                 } as ISolveRouteOptions)
-                console.log(res)
                 setRoutes(res.routes)
             } catch (e) {
                 console.log(e)
+            } finally {
+                setLoading(false)
             }
         }
     }
@@ -50,5 +53,6 @@ export default function useRoute() {
         isValid,
         getRoutes,
         routes,
+        loading,
     }
 }

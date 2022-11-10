@@ -31,6 +31,7 @@ export default function useSearch() {
                 setSuggestions(res.suggestions as ISuggestion[])
             }
         }
+
         search().then(() => {
             if (
                 !(suggestions.length > 0 || (value.text && value.text.trim()))
@@ -43,7 +44,6 @@ export default function useSearch() {
     useEffect(() => {
         const func = async () => {
             if (value.magicKey && value.text) {
-                console.log('search')
                 const res: IGeocodeResponse = await geocode({
                     magicKey: value.magicKey,
                     singleLine: value.text,
