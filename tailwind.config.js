@@ -5,4 +5,5 @@ module.exports = {
         extend: {},
     },
     plugins: [require('daisyui')],
+    safelist: [{ pattern: /^input-\w+$/ }, { pattern: /^select-\w+$/ }],
 }

@@ -1,6 +1,7 @@
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import useSalary from '../../../hook/useSalary'
-import { ChangeEvent, useEffect } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
+import ColorPicker, { IOnPickParam } from '../../Utils/ColorPicker'
 
 export enum SalaryUnit {
     HOUR,
@@ -16,7 +17,7 @@ export interface ISalary {
 }
 
 export interface IProps {
-    onChange: (salary: number) => void
+    onChange: (salary: number, color: string) => void
     onRemove: () => void
 }
 
@@ -44,6 +45,10 @@ export default function SalaryItem(props: IProps) {
         },
     ]
     const { salary, handleChange, normalizeSalary } = useSalary()
+    const [color, setColor] = useState<IOnPickParam>({
+        name: 'primary',
+        color: 'hsl(var(--p))',
+    })
 
     const optionItems: JSX.Element[] = units.map(
         ({ value, label }: { value: SalaryUnit; label: string }) => (
@@ -73,22 +78,23 @@ export default function SalaryItem(props: IProps) {
     }
 
     useEffect(() => {
-        props.onChange(normalizeSalary(salary))
-    }, [salary.unit, salary.size])
+        props.onChange(normalizeSalary(salary), color.color)
+    }, [salary.unit, salary.size, color])
 
     return (
         <div className={'flex items-center justify-between my-10'}>
+            <ColorPicker onPick={setColor} />
             <input
                 value={salary.size}
                 onChange={handleInput}
                 type='number'
                 placeholder={'Salaire'}
-                className={'input input-bordered input-primary'}
+                className={`input input-bordered input-${color.name}`}
             />{' '}
             €
             <select
                 onChange={handleSelect}
-                className={'select select-primary'}
+                className={`select select-${color.name}`}
                 name='unit'
                 id='unit'
             >

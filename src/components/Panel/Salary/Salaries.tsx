@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 export interface ISalaryItem {
     value: number
     id: number
+    color: string
 }
 
 export interface IState {
@@ -13,7 +14,7 @@ export interface IState {
 }
 
 export interface IProps {
-    onChange: (items: number[]) => void
+    onChange: (items: ISalaryItem[]) => void
 }
 
 export default function Salaries(props: IProps) {
@@ -26,18 +27,15 @@ export default function Salaries(props: IProps) {
             salaryItems: [
                 ...oldState.salaryItems,
                 {
-                    id: oldState.salaryItems[oldState.salaryItems.length - 1]
-                        ? oldState.salaryItems[oldState.salaryItems.length - 1]
-                              .id + 1
-                        : 0,
+                    id: new Date().getTime(),
                     value: 0,
+                    color: 'primary',
                 },
             ],
         }))
     }
 
     const removeItem = (i: number) => {
-        console.log(i)
         setState((oldState: IState) => ({
             ...oldState,
             salaryItems: [
@@ -49,7 +47,7 @@ export default function Salaries(props: IProps) {
     }
 
     const getOnChangeSalaryItem = (index: number) => {
-        return (number: number) => {
+        return (number: number, color: string) => {
             setState((oldState: IState) => ({
                 ...oldState,
                 salaryItems: [
@@ -59,16 +57,15 @@ export default function Salaries(props: IProps) {
                     {
                         id: index,
                         value: number,
+                        color,
                     },
-                ],
+                ].sort((a, b) => (a.id > b.id ? 1 : -1)),
             }))
         }
     }
 
     useEffect(() => {
-        props.onChange([
-            ...state.salaryItems.map((item: ISalaryItem) => item.value),
-        ])
+        props.onChange(state.salaryItems)
     }, [state.salaryItems])
 
     return (
@@ -81,13 +78,15 @@ export default function Salaries(props: IProps) {
                     onClick={addItem}
                 />
             </div>
-            {state.salaryItems.map((salaryItem, i: number) => (
-                <SalaryItem
-                    key={salaryItem.id}
-                    onChange={getOnChangeSalaryItem(salaryItem.id)}
-                    onRemove={() => removeItem(salaryItem.id)}
-                />
-            ))}
+            <div className={'overflow-scroll max-h-[50vh]'}>
+                {state.salaryItems.map((salaryItem, i: number) => (
+                    <SalaryItem
+                        key={salaryItem.id}
+                        onChange={getOnChangeSalaryItem(salaryItem.id)}
+                        onRemove={() => removeItem(salaryItem.id)}
+                    />
+                ))}
+            </div>
         </div>
     )
 }

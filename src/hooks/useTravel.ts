@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
 import { ISolveRouteResponse } from '@esri/arcgis-rest-routing'
-import { FeatureCollection, LineString } from 'geojson'
+import {
+    FeatureCollection,
+    GeoJsonProperties,
+    Geometry,
+    LineString,
+} from 'geojson'
 import { LatLng } from 'leaflet'
+import { ISalaryItem } from '../components/Panel/Salary/Salaries'
+import { ISalaryProps } from '../components/Map'
 
 export default function useTravel() {
     const [travel, setTravel] = useState<ISolveRouteResponse['routes'] | null>(
@@ -10,12 +17,12 @@ export default function useTravel() {
     const [geoJsons, setGeoJsons] = useState<FeatureCollection<LineString>[]>(
         []
     )
-    const [salaries, setSalaries] = useState<number[]>([])
+    const [salaries, setSalaries] = useState<ISalaryItem[]>([])
 
     const geoJsonDistance = (
         distance: number
-    ): FeatureCollection<LineString> => {
-        const result: FeatureCollection<LineString> = {
+    ): FeatureCollection<LineString, ISalaryProps> => {
+        const result: FeatureCollection<LineString, ISalaryProps> = {
             type: 'FeatureCollection',
             features: [
                 {
@@ -24,7 +31,10 @@ export default function useTravel() {
                         type: 'LineString',
                         coordinates: [],
                     },
-                    properties: {},
+                    properties: {
+                        Total_Kilometers: 0,
+                        color: '',
+                    },
                 },
             ],
         }
@@ -73,21 +83,28 @@ export default function useTravel() {
     }
 
     useEffect(() => {
-        const sorted: number[] = salaries.sort((a, b) => (a > b ? -1 : 1))
-        const geoJsons: FeatureCollection<LineString>[] = []
+        const sorted: ISalaryItem[] = [...salaries]
+        sorted.sort((a, b) => (a.value > b.value ? -1 : 1))
+
+        const geoJsons: FeatureCollection<LineString, ISalaryProps>[] = []
         if (travel && travel.geoJson) {
             sorted.map((item) => {
-                if (travel && travel.geoJson && item !== 0 && sorted[0]) {
-                    const geoJson = geoJsonDistance(
-                        (item / sorted[0]) *
-                            (
-                                travel.geoJson as FeatureCollection<
-                                    LineString,
-                                    { Total_Kilometers: number }
-                                >
-                            ).features[0].properties['Total_Kilometers'] *
-                            1000
-                    )
+                if (travel && travel.geoJson && item.value !== 0 && sorted[0]) {
+                    const distance =
+                        (item.value / sorted[0].value) *
+                        (
+                            travel.geoJson as FeatureCollection<
+                                LineString,
+                                { Total_Kilometers: number }
+                            >
+                        ).features[0].properties['Total_Kilometers'] *
+                        1000
+                    const geoJson = geoJsonDistance(distance)
+                    if (geoJson.features[0] && geoJson.features[0].properties) {
+                        geoJson.features[0].properties['color'] = item.color
+                        geoJson.features[0].properties['Total_Kilometers'] =
+                            distance / 1000
+                    }
                     geoJsons.push(geoJson)
                 }
             })
