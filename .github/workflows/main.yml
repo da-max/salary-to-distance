@@ -37,8 +37,11 @@ jobs:
                   file: ./coverage/cobertura-coverage.xml
                   flags: unittests
 
-    build:
+    deploy:
         needs: [test]
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -47,15 +50,6 @@ jobs:
               run: |
                   npm i 
                   npm run build
-    deploy:
-        needs: [test, build]
-        environment:
-            name: github-pages
-            url: ${{ steps.deployment.outputs.page_url }}
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v3
             - name: Setup Pages
               uses: actions/configure-pages@v2
             - name: Upload artifact
