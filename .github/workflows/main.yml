@@ -48,7 +48,7 @@ jobs:
                   npm i 
                   npm run build
     deploy:
-        needs: [test, deploy]
+        needs: [test, build]
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
