@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: '/salary-to-distance/',
     plugins: [react()],
     test: {
         coverage: {
