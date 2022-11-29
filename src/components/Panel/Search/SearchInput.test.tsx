@@ -15,9 +15,11 @@ describe('SearchInput', function () {
     beforeEach(() => {
         act(() => {
             render(
-                <SearchInput onValid={() => null} placeholder={'test'}>
-                    {labelName}
-                </SearchInput>
+                <SearchInput
+                    onValid={() => null}
+                    placeholder={'test'}
+                    beforeChildren={labelName}
+                ></SearchInput>
             )
         })
     })
