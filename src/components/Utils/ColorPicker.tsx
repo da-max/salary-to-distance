@@ -72,18 +72,19 @@ export default function ColorPicker(props: IProps) {
 
     useEffect(() => {
         props.onPick({
-            color: colorFromValue(state.currentColor),
+            color: colorFromValue(state.currentColor ?? state.colors[0]),
             name: state.currentColor.replace('bg-', ''),
         })
     }, [state.currentColor])
 
     useEffect(() => {
         if (props.random) {
-            setState((oldState: IState) => ({
-                ...oldState,
-                currentColor:
-                    oldState.colors[random(0, oldState.colors.length)],
-            }))
+            console.log(
+                random(0, state.colors.length) +
+                    ' ' +
+                    state.colors[random(0, state.colors.length)]
+            )
+            selectColor(state.colors[random(0, state.colors.length)])
         }
     }, [])
 

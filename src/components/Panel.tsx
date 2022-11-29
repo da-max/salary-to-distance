@@ -25,11 +25,28 @@ export default function (props: IProps): JSX.Element {
                 height: '100vh',
             }}
             minHeight={'100vh'}
-            className={'p-5 w-full max-h-full'}
+            className={'p-5 w-full max-h-full flex flex-col'}
         >
             <TravelSearch onRoutes={setTravel} />
-            <hr className={'divider'} />
+            <div className={'divider'} />
             <Salaries geoJsons={geoJsons} onChange={setSalaries} />
+            <div className='form-control flex-1 flex justify-end flex-col'>
+                <label className='label'>
+                    <span className='label-text'>Changer le thème</span>
+                </label>
+                <select className='select select-bordered' data-choose-theme=''>
+                    <option disabled selected>
+                        Theme
+                    </option>
+                    <option value='light'>Clair</option>
+                    <option value='dark'>Sombre</option>
+                    <option value='cupcake'>Cupcake</option>
+                    <option value='bumblebee'>Bumblebee</option>
+                    <option value='emerald'>Emerald</option>
+                    <option value='corporate'>Corporate</option>
+                    <option value='synthwave'>Synthwave</option>
+                </select>
+            </div>
         </Resizable>
     )
 }

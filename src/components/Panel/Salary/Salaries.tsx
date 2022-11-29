@@ -11,7 +11,6 @@ import PanelTitle from '../../Utils/PanelTitle'
 import SalaryItem from './SalaryItem'
 import { FeatureCollection, LineString } from 'geojson'
 import { ISalaryProps } from '../../Map'
-import { ArrowsUpDownIcon } from '@heroicons/react/20/solid'
 
 export interface ISalaryItem {
     value: number
@@ -57,7 +56,7 @@ export default function Salaries(props: IProps) {
                                       oldState.salaryItems.length - 1
                                   ].position + 1
                                 : 0,
-                    },
+                    } as ISalaryItem,
                 ].sort((a, b) => (a.position > b.position ? 1 : -1)),
             }))
         }
@@ -76,19 +75,25 @@ export default function Salaries(props: IProps) {
 
     const getOnChangeSalaryItem = (index: number) => {
         return (number: number, color: string) => {
-            setState((oldState: IState) => ({
-                ...oldState,
-                salaryItems: [
-                    ...oldState.salaryItems.filter(
-                        (item: ISalaryItem) => item.id !== index
-                    ),
-                    {
-                        id: index,
-                        value: number,
-                        color,
-                    } as ISalaryItem,
-                ].sort((a, b) => (a.position > b.position ? 1 : -1)),
-            }))
+            setState((oldState: IState) => {
+                const oldSalaryItem = oldState.salaryItems.find(
+                    (item: ISalaryItem) => item.id === index
+                )
+                return {
+                    ...oldState,
+                    salaryItems: [
+                        ...oldState.salaryItems.filter(
+                            (item: ISalaryItem) => item.id !== index
+                        ),
+                        {
+                            id: index,
+                            value: number,
+                            color,
+                            position: oldSalaryItem?.position,
+                        } as ISalaryItem,
+                    ].sort((a, b) => (a.position > b.position ? 1 : -1)),
+                }
+            })
         }
     }
 
@@ -192,7 +197,7 @@ export default function Salaries(props: IProps) {
                     />
                 </div>
             </div>
-            <div className={'overflow-scroll max-h-[50vh]'}>
+            <div className={'overflow-scroll max-h-[40vh]'}>
                 {state.salaryItems.map((salaryItem: ISalaryItem) => (
                     <SalaryItem
                         key={salaryItem.id}

@@ -21,11 +21,16 @@
         "daisyui": "^2.38.0",
         "esri-leaflet": "^3.0.8",
         "leaflet": "^1.9.2",
+        "localforage": "^1.10.0",
+        "match-sorter": "^6.3.1",
         "re-resizable": "^6.9.9",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "react-esri-leaflet": "^2.0.1",
-        "react-leaflet": "^4.1.0"
+        "react-leaflet": "^4.1.0",
+        "react-router-dom": "^6.4.3",
+        "sort-by": "^1.2.0",
+        "theme-change": "^2.2.0"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.16.5",
