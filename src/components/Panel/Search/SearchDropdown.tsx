@@ -1,4 +1,4 @@
-import { ISuggestion } from '../../../hook/useSearch'
+import { ISuggestion } from '../../../hooks/useSearch'
 
 export interface IProps {
     suggestions: ISuggestion[]

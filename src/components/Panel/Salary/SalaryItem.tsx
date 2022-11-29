@@ -1,6 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/solid'
-import useSalary from '../../../hook/useSalary'
-import { ChangeEvent, useEffect, useState } from 'react'
+import useSalary from '../../../hooks/useSalary'
+import { ChangeEvent, ReactNode, useEffect, useState } from 'react'
 import ColorPicker, { IOnPickParam } from '../../Utils/ColorPicker'
 
 export enum SalaryUnit {
@@ -19,6 +19,8 @@ export interface ISalary {
 export interface IProps {
     onChange: (salary: number, color: string) => void
     onRemove: () => void
+    beforeChildren?: ReactNode
+    afterChildren?: ReactNode
 }
 
 export default function SalaryItem(props: IProps) {
@@ -82,26 +84,29 @@ export default function SalaryItem(props: IProps) {
     }, [salary.unit, salary.size, color])
 
     return (
-        <div className={'flex items-center justify-between my-10'}>
-            <ColorPicker onPick={setColor} />
-            <input
-                value={salary.size}
-                onChange={handleInput}
-                type='number'
-                placeholder={'Salaire'}
-                className={`input input-bordered input-${color.name}`}
-            />{' '}
-            €
+        <div className={'flex justify-between my-3'}>
+            <ColorPicker className={'mt-10'} onPick={setColor} random={true} />
+            <div>
+                {props.beforeChildren}
+                <input
+                    value={salary.size}
+                    onChange={handleInput}
+                    type='number'
+                    placeholder={'Salaire'}
+                    className={`input input-bordered input-${color.name}`}
+                />
+                {props.afterChildren}
+            </div>
             <select
                 onChange={handleSelect}
-                className={`select select-${color.name}`}
+                className={`mt-8 select select-${color.name}`}
                 name='unit'
                 id='unit'
             >
                 {optionItems}
             </select>
             <XMarkIcon
-                className={'w-6 h-6 cursor-pointer'}
+                className={'mt-11 w-6 h-6 cursor-pointer'}
                 tabIndex={0}
                 onClick={props.onRemove}
             />

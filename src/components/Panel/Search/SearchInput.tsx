@@ -1,11 +1,12 @@
-import useSearch, { ISuggestion } from '../../../hook/useSearch'
+import useSearch, { ISuggestion } from '../../../hooks/useSearch'
 import { FormEvent, ReactNode, useEffect } from 'react'
 import SearchDropdown from './SearchDropdown'
 import { IPoint } from '@esri/arcgis-rest-geocoding'
 
 export interface IProps {
     placeholder?: string
-    children: ReactNode
+    beforeChildren?: ReactNode
+    afterChildren?: ReactNode
     onValid: (point: IPoint) => void
 }
 
@@ -30,16 +31,15 @@ export default function SearchInput(props: IProps) {
 
     return (
         <div className='form-control w-full max-w-xs'>
-            <label className='label'>
-                <span className='label-text'>{props.children}</span>
-            </label>
+            <label className='label'>{props.beforeChildren}</label>
             <input
                 type='text'
                 value={value.text}
-                placeholder={props.placeholder ?? 'search'}
+                placeholder={props.placeholder ?? 'rechercher'}
                 onChange={onChange}
                 className='input input-bordered input-primary w-full max-w-xs'
             />
+            <label className='label'>{props.afterChildren}</label>
             <SearchDropdown
                 open={open}
                 suggestions={suggestions}

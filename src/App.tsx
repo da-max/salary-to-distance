@@ -1,30 +1,26 @@
 import 'leaflet/dist/leaflet.css'
 import './App.css'
 import Panel from './components/Panel'
-import Map from './components/Map'
+import Map, { ISalaryProps } from './components/Map'
 import { useState } from 'react'
-import { ISolveRouteResponse } from '@esri/arcgis-rest-routing'
-import { ISalaryItem } from './components/Panel/Salary/Salaries'
+import { FeatureCollection, LineString } from 'geojson'
 
 function App() {
-    const [travel, setTravel] = useState<ISolveRouteResponse['routes'] | null>(
-        null
-    )
-    const [salaries, setSalaries] = useState<ISalaryItem[]>([])
+    const [travels, setTravels] = useState<
+        FeatureCollection<LineString, ISalaryProps>[]
+    >([])
 
-    const onRoutes = (routes: ISolveRouteResponse['routes']) => {
-        setTravel(routes)
-    }
-
-    const onChange = (salaryItems: ISalaryItem[]) => {
-        setSalaries(salaryItems)
+    const onChange = (
+        travels: FeatureCollection<LineString, ISalaryProps>[]
+    ) => {
+        setTravels(travels)
     }
 
     return (
         <main className={'h-screen flex justify-between overflow-hidden'}>
-            <Panel onRoutes={onRoutes} onChange={onChange} />
+            <Panel onTravels={onChange} />
             <div className={'flex-1'}>
-                <Map travel={travel} salaries={salaries} />
+                <Map travels={travels} />
             </div>
         </main>
     )

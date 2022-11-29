@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { SwatchIcon } from '@heroicons/react/24/solid'
+import { useRandom } from '../../hooks/useRandom'
 
 export interface IProps {
     onPick: (param: IOnPickParam) => void
+    className?: string
+    random?: boolean
 }
 
 export interface IOnPickParam {
@@ -17,6 +20,7 @@ export interface IState {
 }
 
 export default function ColorPicker(props: IProps) {
+    const { random } = useRandom()
     const [state, setState] = useState({
         isOpen: false,
         colors: [
@@ -73,8 +77,18 @@ export default function ColorPicker(props: IProps) {
         })
     }, [state.currentColor])
 
+    useEffect(() => {
+        if (props.random) {
+            setState((oldState: IState) => ({
+                ...oldState,
+                currentColor:
+                    oldState.colors[random(0, oldState.colors.length)],
+            }))
+        }
+    }, [])
+
     return (
-        <div className='mr-3'>
+        <div className={`mr-3 ${props.className}`}>
             <div>
                 <div className='flex flex-row relative'>
                     <div

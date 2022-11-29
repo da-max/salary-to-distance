@@ -1,4 +1,4 @@
-import { ISuggestion } from '../hook/useSearch'
+import { ISuggestion } from '../hooks/useSearch'
 import { IPoint } from '@esri/arcgis-rest-geocoding'
 import { ISolveRouteResponse } from '@esri/arcgis-rest-routing'
 

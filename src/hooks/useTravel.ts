@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react'
+
 import { ISolveRouteResponse } from '@esri/arcgis-rest-routing'
-import {
-    FeatureCollection,
-    GeoJsonProperties,
-    Geometry,
-    LineString,
-} from 'geojson'
+import { FeatureCollection, LineString } from 'geojson'
 import { LatLng } from 'leaflet'
+
 import { ISalaryItem } from '../components/Panel/Salary/Salaries'
 import { ISalaryProps } from '../components/Map'
 
@@ -14,9 +11,9 @@ export default function useTravel() {
     const [travel, setTravel] = useState<ISolveRouteResponse['routes'] | null>(
         null
     )
-    const [geoJsons, setGeoJsons] = useState<FeatureCollection<LineString>[]>(
-        []
-    )
+    const [geoJsons, setGeoJsons] = useState<
+        FeatureCollection<LineString, ISalaryProps>[]
+    >([])
     const [salaries, setSalaries] = useState<ISalaryItem[]>([])
 
     const geoJsonDistance = (
@@ -34,6 +31,7 @@ export default function useTravel() {
                     properties: {
                         Total_Kilometers: 0,
                         color: '',
+                        id: 0,
                     },
                 },
             ],
@@ -104,6 +102,7 @@ export default function useTravel() {
                         geoJson.features[0].properties['color'] = item.color
                         geoJson.features[0].properties['Total_Kilometers'] =
                             distance / 1000
+                        geoJson.features[0].properties.id = item.id
                     }
                     geoJsons.push(geoJson)
                 }
