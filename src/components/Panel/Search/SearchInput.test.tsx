@@ -19,7 +19,7 @@ describe('SearchInput', function () {
                     onValid={() => null}
                     placeholder={'test'}
                     beforeChildren={labelName}
-                ></SearchInput>
+                />
             )
         })
     })
@@ -97,9 +97,11 @@ describe('SearchInput', function () {
         cleanup()
         const spy = vi.fn(() => null)
         render(
-            <SearchInput onValid={spy} placeholder={'onValid test'}>
-                My onValid test
-            </SearchInput>
+            <SearchInput
+                onValid={spy}
+                placeholder={'onValid test'}
+                beforeChildren={'My onValid test'}
+            />
         )
         const input: HTMLInputElement =
             screen.getByPlaceholderText<HTMLInputElement>('onValid test')
