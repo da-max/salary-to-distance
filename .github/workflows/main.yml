@@ -38,6 +38,8 @@ jobs:
                   flags: unittests
 
     deploy:
+        env:
+            VITE_ESRI_API_KEY: ${{ vars.VITE_ESRI_API_KEY }}
         needs: [test]
         environment:
             name: github-pages
@@ -48,7 +50,7 @@ jobs:
               uses: actions/checkout@v3
             - name: Install and build
               run: |
-                  echo VITE_ESRI_API_KEY=${{ vars.VITE_ESRI_API_KEY }} >> .env
+                  echo VITE_ESRI_API_KEY=$VITE_ESRI_API_KEY >> .env
                   npm i 
                   npm run build
             - name: Setup Pages
