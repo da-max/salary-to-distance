@@ -1,9 +1,11 @@
-import useSearch, { ISuggestion } from '../../../hooks/useSearch'
+import useSearch, { ISuggestion, State } from '../../../hooks/useSearch'
 import { FormEvent, ReactNode, useEffect } from 'react'
 import SearchDropdown from './SearchDropdown'
 import { IPoint } from '@esri/arcgis-rest-geocoding'
+import { useSearchParams } from 'react-router-dom'
 
 export interface IProps {
+    keyParam: 'DEPARTURE' | 'ARRIVAL'
     placeholder?: string
     beforeChildren?: ReactNode
     afterChildren?: ReactNode
@@ -11,7 +13,9 @@ export interface IProps {
 }
 
 export default function SearchInput(props: IProps) {
-    const { value, setValue, open, suggestions, setOpen } = useSearch()
+    const [searchParams] = useSearchParams()
+    const { value, setValue, open, suggestions, setOpen, reverseSearch } =
+        useSearch()
 
     const onSelect = (suggestion: ISuggestion) => {
         setValue(suggestion)
@@ -28,6 +32,20 @@ export default function SearchInput(props: IProps) {
             props.onValid(value.location)
         }
     }, [value.location])
+
+    useEffect(() => {
+        if (props.keyParam) {
+            const keyParams: string[] | undefined = searchParams
+                .get(props.keyParam)
+                ?.split(',')
+            if (keyParams && keyParams.length === 2) {
+                reverseSearch({
+                    x: parseFloat(keyParams[0]),
+                    y: parseFloat(keyParams[1]),
+                })
+            }
+        }
+    }, [])
 
     return (
         <div className='form-control w-full max-w-xs'>

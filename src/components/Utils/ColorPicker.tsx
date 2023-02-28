@@ -79,11 +79,6 @@ export default function ColorPicker(props: IProps) {
 
     useEffect(() => {
         if (props.random) {
-            console.log(
-                random(0, state.colors.length) +
-                    ' ' +
-                    state.colors[random(0, state.colors.length)]
-            )
             selectColor(state.colors[random(0, state.colors.length)])
         }
     }, [])

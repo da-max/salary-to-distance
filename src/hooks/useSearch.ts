@@ -3,9 +3,12 @@ import {
     geocode,
     IGeocodeResponse,
     IPoint,
+    IReverseGeocodeResponse,
+    reverseGeocode,
     suggest,
 } from '@esri/arcgis-rest-geocoding'
 import { ApiKeyManager } from '@esri/arcgis-rest-request'
+import { useSearchParams } from 'react-router-dom'
 
 export interface ISuggestion {
     text: string
@@ -29,16 +32,17 @@ export default function useSearch() {
             if (value.text) {
                 const res = await suggest(value.text, { authentication })
                 setSuggestions(res.suggestions as ISuggestion[])
+                if (
+                    !(
+                        suggestions.length > 0 ||
+                        (value.text && value.text.trim())
+                    )
+                ) {
+                    setOpen(false)
+                }
             }
         }
-
-        search().then(() => {
-            if (
-                !(suggestions.length > 0 || (value.text && value.text.trim()))
-            ) {
-                setOpen(false)
-            }
-        })
+        search()
     }, [value])
 
     useEffect(() => {
@@ -60,11 +64,22 @@ export default function useSearch() {
         func()
     }, [value.magicKey])
 
+    const reverseSearch = async (location: IPoint) => {
+        const res: IReverseGeocodeResponse = await reverseGeocode(location, {
+            authentication,
+        })
+        setValue({
+            location: res.location,
+            text: res.address.Match_addr,
+        })
+    }
+
     return {
         value,
         setValue,
         suggestions,
         open,
         setOpen,
+        reverseSearch,
     }
 }

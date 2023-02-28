@@ -11,6 +11,7 @@ import PanelTitle from '../../Utils/PanelTitle'
 import SalaryItem from './SalaryItem'
 import { FeatureCollection, LineString } from 'geojson'
 import { ISalaryProps } from '../../Map'
+import { useSearchParams } from 'react-router-dom'
 
 export interface ISalaryItem {
     value: number
@@ -39,6 +40,7 @@ export default function Salaries(props: IProps) {
         sort: SortedMode.ASCENDANT,
         salaryItems: [],
     })
+    const [searchParams] = useSearchParams()
 
     const addItem = () => {
         if (canAddSalary()) {
@@ -50,12 +52,7 @@ export default function Salaries(props: IProps) {
                         id: new Date().getTime(),
                         value: 0,
                         color: 'primary',
-                        position:
-                            oldState.salaryItems.length - 1 >= 0
-                                ? oldState.salaryItems[
-                                      oldState.salaryItems.length - 1
-                                  ].position + 1
-                                : 0,
+                        position: oldState.salaryItems.length,
                     } as ISalaryItem,
                 ].sort((a, b) => (a.position > b.position ? 1 : -1)),
             }))
@@ -107,9 +104,11 @@ export default function Salaries(props: IProps) {
         switch (state.sort) {
             case SortedMode.ASCENDANT:
                 setState((oldState: IState) => {
-                    const salaryItems: ISalaryItem[] = [
-                        ...oldState.salaryItems,
-                    ].sort((a, b) => (a.value > b.value ? 1 : -1))
+                    const salaryItems: ISalaryItem[] = (
+                        JSON.parse(
+                            JSON.stringify(oldState.salaryItems)
+                        ) as ISalaryItem[]
+                    ).sort((a, b) => (a.value > b.value ? 1 : -1))
                     salaryItems.forEach((item: ISalaryItem, i: number) => {
                         item.position = oldState.salaryItems[i].position
                     })
@@ -121,10 +120,11 @@ export default function Salaries(props: IProps) {
                 break
             case SortedMode.DESCENDANT:
                 setState((oldState: IState) => {
-                    const salaryItems: ISalaryItem[] =
-                        oldState.salaryItems.sort((a, b) =>
-                            a.value > b.value ? -1 : 1
-                        )
+                    const salaryItems: ISalaryItem[] = (
+                        JSON.parse(
+                            JSON.stringify(oldState.salaryItems)
+                        ) as ISalaryItem[]
+                    ).sort((a, b) => (a.value > b.value ? -1 : 1))
                     salaryItems.forEach((item: ISalaryItem, i: number) => {
                         item.position = oldState.salaryItems[i].position
                     })
@@ -164,6 +164,11 @@ export default function Salaries(props: IProps) {
     useEffect(() => {
         props.onChange(state.salaryItems)
     }, [state.salaryItems])
+
+    useEffect(() => {
+        const salary = searchParams.get('SALARY[]')
+        console.log(salary)
+    }, [])
 
     return (
         <div>
