@@ -9,17 +9,22 @@ import {
 import SearchInput from './SearchInput'
 import { suggestionElement } from '../../../test/constants'
 import { vi } from 'vitest'
+import { MemoryRouter, RouterProvider } from 'react-router-dom'
+import routes from '../../../routes'
 
 describe('SearchInput', function () {
     const labelName: string = 'My Label Test'
     beforeEach(() => {
         act(() => {
             render(
-                <SearchInput
-                    onValid={() => null}
-                    placeholder={'test'}
-                    beforeChildren={labelName}
-                />
+                <MemoryRouter initialEntries={['/salary-to-distance']}>
+                    <SearchInput
+                        keyParam={'DEPARTURE'}
+                        onValid={() => null}
+                        placeholder={'test'}
+                        beforeChildren={labelName}
+                    />
+                </MemoryRouter>
             )
         })
     })
@@ -97,11 +102,14 @@ describe('SearchInput', function () {
         cleanup()
         const spy = vi.fn(() => null)
         render(
-            <SearchInput
-                onValid={spy}
-                placeholder={'onValid test'}
-                beforeChildren={'My onValid test'}
-            />
+            <MemoryRouter initialEntries={['/salary-to-distance']}>
+                <SearchInput
+                    keyParam={'ARRIVAL'}
+                    onValid={spy}
+                    placeholder={'onValid test'}
+                    beforeChildren={'My onValid test'}
+                />
+            </MemoryRouter>
         )
         const input: HTMLInputElement =
             screen.getByPlaceholderText<HTMLInputElement>('onValid test')
