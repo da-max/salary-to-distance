@@ -17,7 +17,7 @@ describe('SearchInput', function () {
     beforeEach(() => {
         act(() => {
             render(
-                <MemoryRouter initialEntries={['/salary-to-distance']}>
+                <MemoryRouter initialEntries={['/']}>
                     <SearchInput
                         keyParam={'DEPARTURE'}
                         onValid={() => null}
@@ -102,7 +102,7 @@ describe('SearchInput', function () {
         cleanup()
         const spy = vi.fn(() => null)
         render(
-            <MemoryRouter initialEntries={['/salary-to-distance']}>
+            <MemoryRouter initialEntries={['/']}>
                 <SearchInput
                     keyParam={'ARRIVAL'}
                     onValid={spy}
